@@ -26,7 +26,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
@@ -345,3 +345,9 @@ MigrationBackup/
 .ionide/
 
 !*/bin/data/*
+bin/fmodex64.dll
+bin/fmodexL64.dll
+bin/FreeImage.dll
+bin/ProjectGame1_debug.exe
+bin/ProjectGame1_debug.exp
+bin/ProjectGame1_debug.lib
