@@ -33,6 +33,8 @@ glm::vec3 spriteSystem::missleUp()
 	return glm::vec3(player.loc.position.x, -10000,0);
 }
 
+
+
 void spriteSystem::missleDraw(bool x)
 {
 	int i = 0;

@@ -18,6 +18,7 @@ public:
 	glm::vec3 directionMissle;
 	ofImage img;
 	Triangle loc;
+	int lifeSpan;
 	float missleAngle = 0;
 	float missleSpeed = 5;
 };

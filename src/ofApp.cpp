@@ -12,6 +12,9 @@ void ofApp::setup() {
 	gui.add(fireSlider.setup("firespeed", 5, 1, 10));
 	gui.add(lineButton.setup("Missle Line toggle", false));
 
+	spawner1.player.loc.position = glm::vec3(500, 20, 0);
+	spawner1.player.img.load("Player.png");
+
 	// Exam;ple on how to add elements to a vector<>
 	// Store the vertices to the triangle relative to origin (0, 0, 0);
 	// The triangle is moveable in that we add these vertices to it's
@@ -20,23 +23,29 @@ void ofApp::setup() {
 	playerSprite.player.loc.verts.push_back(glm::vec3(100, -100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(0, 100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(-100, -100, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(100, -100, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(0, 100, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(-100, -100, 0));
 	ofSetBackgroundColor(ofColor::black);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	//Determine next postion of the player by buttons pressed
+	MissleTimer++;
+	Timer++;
 	if (bSpaceKeyDown) {
-		if (MissleTimer < 0) {
+		if (fmod(MissleTimer,30) == 0) {
 			playerFire.play();
 			float x = angleSlider;
 			playerSprite.addMissle(playerSprite.missleUp(), x,fireSlider);
-			MissleTimer = 30;
-		}
-		else {
-			MissleTimer--;
 		}
 	}
+
+	if (fmod(Timer, 60) == 0) {
+		spawner1.addMissle(spawner1.missleUp(), PI, 5);
+	}
+
 	float nextX = 0;
 	float nextY = 0;
 	if (bUpKeyDown) {
@@ -78,6 +87,7 @@ void ofApp::update() {
 
 	//Update missles
 	playerSprite.missleUpdate();
+	spawner1.missleUpdate();
 }
 
 //--------------------------------------------------------------
@@ -110,6 +120,15 @@ void ofApp::draw() {
 		ofPopMatrix();
 
 		playerSprite.missleDraw(lineButton);
+		
+		ofPushMatrix();
+		m = glm::translate(glm::mat4(1.0), glm::vec3(spawner1.player.loc.position));
+		ofMultMatrix(m);
+		ofSetColor(255, 255, 255);
+		spawner1.player.img.draw(-50, -50, 100, 100);
+		ofPopMatrix();
+
+		spawner1.missleDraw(lineButton);
 	}
 	
 }
@@ -177,7 +196,6 @@ void ofApp::keyReleased(int key) {
 		break;
 	case ' ':
 		bSpaceKeyDown = false;
-		MissleTimer = 0;
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "sprite.h"
 #include "spriteSystem.h"
+#include "emitter.h"
 
 
 
@@ -40,6 +41,8 @@ public:
 	float playerSpeed = 5;
 	float MissleTimer = 0;
 
+	float Timer = 1;
+
 
 	// UI control data
 	//
@@ -55,6 +58,8 @@ public:
 	bool bUpKeyDown = false;
 	bool bLeftKeyDown = false;
 	bool bRightKeyDown = false;
+
+	emitter spawner1;
 
 
 

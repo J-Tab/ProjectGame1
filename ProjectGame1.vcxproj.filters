@@ -43,6 +43,9 @@
     <ClCompile Include="src\spriteSystem.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\emitter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -102,6 +105,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\sprite.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\emitter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
