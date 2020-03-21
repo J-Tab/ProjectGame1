@@ -5,13 +5,19 @@
 #include "ofxGui.h"
 #include "sprite.h"
 
-
+// Class that is similar to the spriteSystem class but it is for enemy spawners.
 
 class emitter :
 	public spriteSystem
 {
 public:
+
 	glm::vec3 missleDown();
+
+
+
+	void enemyDraw(bool x);
+	void addEnemy(glm::vec3 directionNew, float angle, float speed);
 	sprite location;
 
 };

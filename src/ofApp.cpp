@@ -11,8 +11,9 @@ void ofApp::setup() {
 	gui.add(angleSlider.setup("angle", 0, 0, 5));
 	gui.add(fireSlider.setup("firespeed", 5, 1, 10));
 	gui.add(lineButton.setup("Missle Line toggle", false));
+	gui.add(enemyHitbox.setup("Enemy Hitbox Toggle", false));
 
-	spawner1.player.loc.position = glm::vec3(500, 20, 0);
+	spawner1.player.loc.position = glm::vec3(ofGetWidth()/2, 20, 0);
 	spawner1.player.img.load("Player.png");
 
 	// Exam;ple on how to add elements to a vector<>
@@ -23,9 +24,9 @@ void ofApp::setup() {
 	playerSprite.player.loc.verts.push_back(glm::vec3(100, -100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(0, 100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(-100, -100, 0));
-	spawner1.player.loc.verts.push_back(glm::vec3(100, -100, 0));
-	spawner1.player.loc.verts.push_back(glm::vec3(0, 100, 0));
-	spawner1.player.loc.verts.push_back(glm::vec3(-100, -100, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(-30, 30, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(0, -30, 0));
+	spawner1.player.loc.verts.push_back(glm::vec3(30, 30, 0));
 	ofSetBackgroundColor(ofColor::black);
 }
 
@@ -35,15 +36,19 @@ void ofApp::update() {
 	MissleTimer++;
 	Timer++;
 	if (bSpaceKeyDown) {
-		if (fmod(MissleTimer,30) == 0) {
+		if (fmod(MissleTimer,fireRate) == 0) {
 			playerFire.play();
 			float x = angleSlider;
 			playerSprite.addMissle(playerSprite.missleUp(), x,fireSlider);
 		}
 	}
 
-	if (fmod(Timer, 60) == 0) {
-		spawner1.addMissle(spawner1.missleUp(), PI, 5);
+	if (fmod(Timer, 80) == 0) {
+		float random = ((float)rand()) / (float)RAND_MAX;
+		float diff =  PI/2;
+		float r = random * diff;
+		r += PI / 2 + PI/4;
+		spawner1.addEnemy(spawner1.missleUp(),r , 2);
 	}
 
 	float nextX = 0;
@@ -88,6 +93,7 @@ void ofApp::update() {
 	//Update missles
 	playerSprite.missleUpdate();
 	spawner1.missleUpdate();
+	spawner1.spawnHitbox = enemyHitbox;
 }
 
 //--------------------------------------------------------------
@@ -108,12 +114,27 @@ void ofApp::draw() {
 		}
 	
 
+		//draw enemies
+		ofPushMatrix();
+		glm::mat4 m = glm::translate(glm::mat4(1.0), glm::vec3(spawner1.player.loc.position));
+		ofMultMatrix(m);
+		ofSetColor(255, 255, 255);
+		spawner1.player.img.draw(-50, -50, 100, 100);
+		ofPopMatrix();
+
+		spawner1.enemyDraw(lineButton);
+
+
+
+
+
+
 		// draw player in screen space (we need to add the position to get screen coordinates)
 		//
 
 
 		ofPushMatrix();
-		glm::mat4 m = glm::translate(glm::mat4(1.0), glm::vec3(playerSprite.player.loc.position));
+		m = glm::translate(glm::mat4(1.0), glm::vec3(playerSprite.player.loc.position));
 		ofMultMatrix(m);
 		ofSetColor(255, 255, 255);
 		playerSprite.player.img.draw(-50, -50, 100, 100);
@@ -121,14 +142,7 @@ void ofApp::draw() {
 
 		playerSprite.missleDraw(lineButton);
 		
-		ofPushMatrix();
-		m = glm::translate(glm::mat4(1.0), glm::vec3(spawner1.player.loc.position));
-		ofMultMatrix(m);
-		ofSetColor(255, 255, 255);
-		spawner1.player.img.draw(-50, -50, 100, 100);
-		ofPopMatrix();
-
-		spawner1.missleDraw(lineButton);
+		
 	}
 	
 }

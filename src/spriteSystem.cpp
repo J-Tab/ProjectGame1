@@ -48,7 +48,7 @@ void spriteSystem::missleDraw(bool x)
 		glm::mat4 M = glm::rotate(m, (missleCollect.at(i).missleAngle), glm::vec3(0, 0, 1));
 		ofMultMatrix(M);
 		ofSetColor(255, 255, 255);
-		missleCollect.at(i).img.draw(-50, -50, 100, 100);
+		missleCollect.at(i).img.draw(-25, -25, 50, 50);
 		ofPopMatrix();
 		i++;
 	}

@@ -10,6 +10,7 @@ public:
 	glm::vec3 missleUp();
 	void missleDraw(bool x);
 	void missleUpdate();
+	bool spawnHitbox;
 
 
 

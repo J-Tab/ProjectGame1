@@ -39,9 +39,9 @@ public:
 	glm::vec3 lastMouse;   // location of where mouse moved last (when dragging)
 	bool startGame = false;
 	float playerSpeed = 5;
-	float MissleTimer = 0;
+	int MissleTimer = 0;
 
-	float Timer = 1;
+	int Timer = 0;
 
 
 	// UI control data
@@ -61,13 +61,14 @@ public:
 
 	emitter spawner1;
 
-
+	int fireRate = 40;
 
 	//Debug data
 	//
 	ofxPanel gui;
 	ofxFloatSlider angleSlider;
 	ofxToggle lineButton;
+	ofxToggle enemyHitbox;
 	ofxFloatSlider fireSlider;
 
 	ofSoundPlayer playerFire;
