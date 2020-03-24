@@ -5,11 +5,23 @@ void spriteSystem::addMissle(glm::vec3 directionNew, float angle,float speed)
 	sprite missle;
 	glm::vec3 direction = directionNew;
 	missle.img.load("placeHolder.png");
-	missle.loc = player.loc;
+
+
+	missle.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
+	missle.loc.verts.push_back(glm::vec3(0, missleSize, 0));
+	missle.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+	missle.loc.position = player.loc.position;
+	missle.loc.size = missleSize;
 	glm::vec3 heading = glm::normalize(direction - missle.loc.position);
 
 	float s = sin(angle);
 	float c = cos(angle);
+
+
+
+	
+
+
 
 	// translate point back to origin:
 	direction.x -= missle.loc.position.x;
@@ -48,11 +60,21 @@ void spriteSystem::missleDraw(bool x)
 		glm::mat4 M = glm::rotate(m, (missleCollect.at(i).missleAngle), glm::vec3(0, 0, 1));
 		ofMultMatrix(M);
 		ofSetColor(255, 255, 255);
-		missleCollect.at(i).img.draw(-25, -25, 50, 50);
+		if (spawnHitbox) {
+			ofSetColor(ofColor::blue);
+			ofDrawTriangle(missleCollect.at(i).loc.verts[0], missleCollect.at(i).loc.verts[1], missleCollect.at(i).loc.verts[2]);
+		}
+		else {
+			missleCollect.at(i).img.draw(-35, -35, 70, 70);
+		}
 		ofPopMatrix();
 		i++;
 	}
 }
+
+
+
+
 
 void spriteSystem::missleUpdate()
 {
@@ -61,8 +83,9 @@ void spriteSystem::missleUpdate()
 	while (i < missleCollect.size()) {
 		//delete missle if out of bounds
 		if (missleCollect[i].loc.position.y < 0 || missleCollect[i].loc.position.y > ofGetHeight() || missleCollect[i].loc.position.x < 0 || missleCollect[i].loc.position.x > ofGetWidth()) {
-			missleCollect.erase(missleCollect.begin() + i);
-			i--;
+			int x = missleCollect.size() - 1;
+			std::swap(missleCollect[i], missleCollect[missleCollect.size() - 1]);
+			missleCollect.pop_back();
 		}
 		else {
 			float nextPosition;
@@ -91,4 +114,12 @@ void spriteSystem::missleUpdate()
 		missleTemp.push(temp);
 	}
 	missleCollect.swap(missleNew);*/
+}
+
+void spriteSystem::missleKill(int i)
+{
+	int x = missleCollect.size()-1;
+
+	std::swap(missleCollect[i], missleCollect[missleCollect.size()-1]);
+	missleCollect.pop_back();
 }

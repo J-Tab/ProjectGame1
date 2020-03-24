@@ -35,7 +35,11 @@ void emitter::addEnemy(glm::vec3 directionNew, float angle, float speed)
 	sprite missle;
 	glm::vec3 direction = directionNew;
 	missle.img.load("Enemy.png");
-	missle.loc = player.loc;
+	missle.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
+	missle.loc.verts.push_back(glm::vec3(0, missleSize, 0));
+	missle.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+	missle.loc.position = player.loc.position;
+	missle.loc.size = missleSize;
 	glm::vec3 heading = glm::normalize(direction - missle.loc.position);
 
 	float s = sin(angle);

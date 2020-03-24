@@ -28,6 +28,24 @@ public:
 
 	glm::vec3 curveEval(float x, float scale, float cycles);
 
+	
+	
+	
+	// detect a collision between the two inputed sprites
+	// detect a collision between the two inputed sprite
+	bool detectCollision(sprite a, sprite b);
+
+
+	// Part of the update function, checks similar sprites to see if they are together.
+	//COLLISION CURRENTLY UNOPTIMAL
+	void collisionUpdate();
+
+
+	// Search for potential sprite collision using binary search, return -1 if no match
+	
+
+
+	
 
 	// rotate vertices (vin) by "angle" and return result in (vout).
 	//
@@ -70,6 +88,9 @@ public:
 	ofxToggle lineButton;
 	ofxToggle enemyHitbox;
 	ofxFloatSlider fireSlider;
+	ofxFloatSlider spawnRate;
+	ofxFloatSlider enemySpeed;
+
 
 	ofSoundPlayer playerFire;
 

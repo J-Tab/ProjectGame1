@@ -11,10 +11,10 @@ public:
 	void missleDraw(bool x);
 	void missleUpdate();
 	bool spawnHitbox;
+	void missleKill(int i);
 
-
-
+	int missleSize = 30;
 	sprite player;
-	vector <sprite> missleCollect;
+	std::vector <sprite> missleCollect;
 };
 

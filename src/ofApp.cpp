@@ -10,6 +10,8 @@ void ofApp::setup() {
 	gui.setup();
 	gui.add(angleSlider.setup("angle", 0, 0, 5));
 	gui.add(fireSlider.setup("firespeed", 5, 1, 10));
+	gui.add(spawnRate.setup("enemy spawn speed", 80, 1, 200));
+	gui.add(enemySpeed.setup("enemy velocity", 2, 1, 5));
 	gui.add(lineButton.setup("Missle Line toggle", false));
 	gui.add(enemyHitbox.setup("Enemy Hitbox Toggle", false));
 
@@ -33,67 +35,73 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::update() {
 	//Determine next postion of the player by buttons pressed
-	MissleTimer++;
-	Timer++;
-	if (bSpaceKeyDown) {
-		if (fmod(MissleTimer,fireRate) == 0) {
-			playerFire.play();
-			float x = angleSlider;
-			playerSprite.addMissle(playerSprite.missleUp(), x,fireSlider);
+	if (startGame) {
+		MissleTimer++;
+		Timer++;
+		if (bSpaceKeyDown) {
+			if (fmod(MissleTimer, fireRate) == 0) {
+				playerFire.play();
+				float x = angleSlider;
+				playerSprite.addMissle(playerSprite.missleUp(), x, fireSlider);
+			}
 		}
-	}
 
-	if (fmod(Timer, 80) == 0) {
-		float random = ((float)rand()) / (float)RAND_MAX;
-		float diff =  PI/2;
-		float r = random * diff;
-		r += PI / 2 + PI/4;
-		spawner1.addEnemy(spawner1.missleUp(),r , 2);
-	}
+		if (fmod(Timer, (int)spawnRate) == 0) {
+			float random = ((float)rand()) / (float)RAND_MAX;
+			float diff = PI / 2;
+			float r = random * diff;
+			r += PI / 2 + PI / 4;
+			spawner1.addEnemy(spawner1.missleUp(), r, enemySpeed);
+		}
 
-	float nextX = 0;
-	float nextY = 0;
-	if (bUpKeyDown) {
-		nextY -= 1;
-	}
-	if (bDownKeyDown) {
-		nextY += 1;
-	}
-	if (bRightKeyDown) {
-		nextX += 1;
-	}
-	if (bLeftKeyDown) {
-		nextX -= 1;
-	}
-	//Ship movement based on keyboard controls
-	//Make a vector that determines the next location of the player, distance determined by the playerSpeed modifier.
-	nextX = nextX * playerSpeed;
-	nextY = nextY * playerSpeed;
-	float nextXVec = playerSprite.player.loc.position.x + nextX;
-	float nextYVec = playerSprite.player.loc.position.y + nextY;
+		float nextX = 0;
+		float nextY = 0;
+		if (bUpKeyDown) {
+			nextY -= 1;
+		}
+		if (bDownKeyDown) {
+			nextY += 1;
+		}
+		if (bRightKeyDown) {
+			nextX += 1;
+		}
+		if (bLeftKeyDown) {
+			nextX -= 1;
+		}
+		//Ship movement based on keyboard controls
+		//Make a vector that determines the next location of the player, distance determined by the playerSpeed modifier.
+		nextX = nextX * playerSpeed;
+		nextY = nextY * playerSpeed;
+		float nextXVec = playerSprite.player.loc.position.x + nextX;
+		float nextYVec = playerSprite.player.loc.position.y + nextY;
 
-	//Places bounds on the screen
-	if (nextXVec < 0) {
-		nextXVec = 0;
-	}
-	if (nextXVec > ofGetWidth()) {
-		nextXVec = ofGetWidth();
-	}
-	if (playerSprite.player.loc.position.y + nextY < 0) {
-		nextYVec = 0;
-	}
-	if (nextYVec > ofGetHeight()) {
-		nextYVec = ofGetHeight();
-	}
+		//Places bounds on the screen
+		if (nextXVec < 0) {
+			nextXVec = 0;
+		}
+		if (nextXVec > ofGetWidth()) {
+			nextXVec = ofGetWidth();
+		}
+		if (playerSprite.player.loc.position.y + nextY < 0) {
+			nextYVec = 0;
+		}
+		if (nextYVec > ofGetHeight()) {
+			nextYVec = ofGetHeight();
+		}
 
-	//Sets player location
-	playerSprite.player.loc.position = glm::vec3(nextXVec, nextYVec, 0);
+		//Sets player location
+		playerSprite.player.loc.position = glm::vec3(nextXVec, nextYVec, 0);
 
+		//Check collisions
+		collisionUpdate();
 
-	//Update missles
-	playerSprite.missleUpdate();
-	spawner1.missleUpdate();
-	spawner1.spawnHitbox = enemyHitbox;
+		//Update missles
+		playerSprite.missleUpdate();
+		spawner1.missleUpdate();
+		spawner1.spawnHitbox = enemyHitbox;
+		playerSprite.spawnHitbox = enemyHitbox;
+	}
+	
 }
 
 //--------------------------------------------------------------
@@ -257,6 +265,48 @@ void ofApp::windowResized(int w, int h) {
 void ofApp::gotMessage(ofMessage msg) {
 
 }
+
+
+// Check if these two sprites are in the same area.
+bool ofApp::detectCollision(sprite a, sprite b)
+{
+	int ax = a.loc.position.x;
+	int ay = a.loc.position.y;
+	int bx = b.loc.position.x;
+	int by = b.loc.position.y;
+	if (ax<=bx+b.loc.size && ax + a.loc.size >= bx && ay<=by + b.loc.size && ay + a.loc.size >= by) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	
+}
+
+void ofApp::collisionUpdate()
+{
+	bool deleted = false;
+	int tempI;
+	for (int i = 0; i < playerSprite.missleCollect.size(); i++) {
+		if (deleted) {
+			i = tempI;
+			deleted = false;
+		}
+		for (int j = 0; j < spawner1.missleCollect.size(); j++) {
+			if (detectCollision(playerSprite.missleCollect[i], spawner1.missleCollect[j])) {
+				playerSprite.missleKill(i);
+				tempI = i;
+				spawner1.missleKill(j);
+				deleted = true;
+			}
+			if (deleted) {
+				j = spawner1.missleCollect.size();
+			}
+		}
+	}
+}
+
+
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo) {

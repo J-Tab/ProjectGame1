@@ -8,7 +8,9 @@ class Triangle {
 public:
 	vector<glm::vec3> verts;
 	glm::vec3 position;    // position of the triangle (in screen space)
+	
 	float angle = 0;       // rotation angle of triangle
+	int size;
 };
 
 
@@ -21,5 +23,6 @@ public:
 	int lifeSpan;
 	float missleAngle = 0;
 	float missleSpeed = 5;
+	
 };
 
