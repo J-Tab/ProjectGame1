@@ -4,6 +4,7 @@
 void ofApp::setup() {
 	playerFire.load("Fire.mp3");
 	playerFire.setMultiPlay(true);
+	enemyDeathSound.load("EnemyDeath.ogg");
 	playerSprite.player.img.load("Player.png");
 	background.load("placeHolderBackGround.jpg");
 	playerSprite.player.loc.position = glm::vec3(ofGetWidth() / 2.0, ofGetHeight() / 2.0, 0);
@@ -298,6 +299,7 @@ void ofApp::collisionUpdate()
 				tempI = i;
 				spawner1.missleKill(j);
 				deleted = true;
+				enemyDeathSound.play();
 			}
 			if (deleted) {
 				j = spawner1.missleCollect.size();

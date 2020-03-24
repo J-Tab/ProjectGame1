@@ -93,7 +93,7 @@ public:
 
 
 	ofSoundPlayer playerFire;
-
+	ofSoundPlayer enemyDeathSound;
 	//Sprite Data
 	spriteSystem playerSprite;
 	ofImage background;
