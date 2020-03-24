@@ -11,14 +11,22 @@ class emitter :
 	public spriteSystem
 {
 public:
+	emitter() {
+		enemyBase.img.load("Enemy.png");
+		enemyBase.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
+		enemyBase.loc.verts.push_back(glm::vec3(0, missleSize, 0));
+		enemyBase.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+	}
+
+
 
 	glm::vec3 missleDown();
 
 
 
 	void enemyDraw(bool x);
-	void addEnemy(glm::vec3 directionNew, float angle, float speed);
+	void addEnemy(glm::vec3 direction, float angle, float speed);
 	sprite location;
-
+	sprite enemyBase;
 };
 

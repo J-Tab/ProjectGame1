@@ -6,6 +6,16 @@
 class spriteSystem 
 {
 public:
+	spriteSystem() {
+		missleBase.img.load("placeHolder.png");
+		missleBase.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
+		missleBase.loc.verts.push_back(glm::vec3(0, missleSize, 0));
+		missleBase.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+	}
+
+
+
+
 	void addMissle(glm::vec3 direction, float angle, float speed);
 	glm::vec3 missleUp();
 	void missleDraw(bool x);
@@ -15,6 +25,9 @@ public:
 
 	int missleSize = 30;
 	sprite player;
+	sprite missleBase;
+
+
 	std::vector <sprite> missleCollect;
 };
 

@@ -5,6 +5,7 @@ void ofApp::setup() {
 	playerFire.load("Fire.mp3");
 	playerFire.setMultiPlay(true);
 	enemyDeathSound.load("EnemyDeath.ogg");
+	enemyDeathSound.setVolume(.3f);
 	playerSprite.player.img.load("Player.png");
 	background.load("placeHolderBackGround.jpg");
 	playerSprite.player.loc.position = glm::vec3(ofGetWidth() / 2.0, ofGetHeight() / 2.0, 0);
@@ -128,9 +129,7 @@ void ofApp::draw() {
 		glm::mat4 m = glm::translate(glm::mat4(1.0), glm::vec3(spawner1.player.loc.position));
 		ofMultMatrix(m);
 		ofSetColor(255, 255, 255);
-		spawner1.player.img.draw(-50, -50, 100, 100);
 		ofPopMatrix();
-
 		spawner1.enemyDraw(lineButton);
 
 
