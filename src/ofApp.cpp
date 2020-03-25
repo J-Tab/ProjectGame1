@@ -268,13 +268,13 @@ void ofApp::gotMessage(ofMessage msg) {
 
 
 // Check if these two sprites are in the same area.
-bool ofApp::detectCollision(sprite a, sprite b)
+bool ofApp::detectCollision(Triangle a, Triangle b)
 {
-	int ax = a.loc.position.x;
-	int ay = a.loc.position.y;
-	int bx = b.loc.position.x;
-	int by = b.loc.position.y;
-	if (ax<=bx+b.loc.size && ax + a.loc.size >= bx && ay<=by + b.loc.size && ay + a.loc.size >= by) {
+	int ax = a.position.x;
+	int ay = a.position.y;
+	int bx = b.position.x;
+	int by = b.position.y;
+	if (ax<=bx+b.size && ax + a.size >= bx && ay<=by + b.size && ay + a.size >= by) {
 		return true;
 	}
 	else {
@@ -293,16 +293,19 @@ void ofApp::collisionUpdate()
 			deleted = false;
 		}
 		for (int j = 0; j < spawner1.missleCollect.size(); j++) {
-			if (detectCollision(playerSprite.missleCollect[i], spawner1.missleCollect[j])) {
-				playerSprite.missleKill(i);
-				tempI = i;
-				spawner1.missleKill(j);
-				deleted = true;
-				enemyDeathSound.play();
+
+			if (ofDistSquared(playerSprite.missleCollect[i].loc.position.x, playerSprite.missleCollect[i].loc.position.y, spawner1.missleCollect[j].loc.position.x, spawner1.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.missleCollect[i].loc, spawner1.missleCollect[j].loc)) {
+					playerSprite.missleKill(i);
+					tempI = i;
+					spawner1.missleKill(j);
+					deleted = true;
+					enemyDeathSound.play();
+					j = spawner1.missleCollect.size();
+				}
 			}
-			if (deleted) {
-				j = spawner1.missleCollect.size();
-			}
+			
+
 		}
 	}
 }

@@ -33,7 +33,7 @@ public:
 	
 	// detect a collision between the two inputed sprites
 	// detect a collision between the two inputed sprite
-	bool detectCollision(sprite a, sprite b);
+	bool detectCollision(Triangle a, Triangle b);
 
 
 	// Part of the update function, checks similar sprites to see if they are together.
