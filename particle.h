@@ -4,6 +4,7 @@
 class Particle {
 public:
 	Particle();
+	Particle(ofVec3f pos,double angle, double initVel);
 
 	ofVec3f position;
 	ofVec3f velocity;

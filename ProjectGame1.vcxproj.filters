@@ -116,6 +116,9 @@
     <ClInclude Include="particle.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="explosionEmitter.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
