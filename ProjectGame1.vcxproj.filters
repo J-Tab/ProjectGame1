@@ -52,6 +52,9 @@
     <ClCompile Include="src\particle.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\emitterPhys.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -120,6 +123,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\particle.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\emitterPhys.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

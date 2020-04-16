@@ -7,6 +7,13 @@ glm::vec3 emitter::missleDown()
 
 void emitter::enemyDraw(bool x)
 {
+
+
+
+
+
+
+
 	int i = 0;
 	while (i < missleCollect.size()) {
 		//draw missle
@@ -32,26 +39,36 @@ void emitter::enemyDraw(bool x)
 
 void emitter::addEnemy(glm::vec3 direction, float angle, float speed)
 {
-	enemyBase.loc.position = player.loc.position;
-	enemyBase.loc.size = missleSize;
-	glm::vec3 heading = glm::normalize(direction - enemyBase.loc.position);
+	//speed and angle dont matter when physics are enabled
+	if (physicsEnabled) {
+		enemyBase.particle = Particle(player.loc.position, direction, angle, speed);
+		missleCollect.push_back(enemyBase);
+	}
+	else {
+		enemyBase.loc.position = player.loc.position;
+		enemyBase.loc.size = missleSize;
+		glm::vec3 heading = glm::normalize(direction - enemyBase.loc.position);
 
-	float s = sin(angle);
-	float c = cos(angle);
+		float s = sin(angle);
+		float c = cos(angle);
 
-	// translate point back to origin:
-	direction.x -= enemyBase.loc.position.x;
-	direction.y -= enemyBase.loc.position.y;
+		// translate point back to origin:
+		direction.x -= enemyBase.loc.position.x;
+		direction.y -= enemyBase.loc.position.y;
 
-	// rotate point
-	float xnew = direction.x * c - direction.y * s;
-	float ynew = direction.x * s + direction.y * c;
+		// rotate point
+		float xnew = direction.x * c - direction.y * s;
+		float ynew = direction.x * s + direction.y * c;
 
-	// translate point back:
-	direction.x = xnew + enemyBase.loc.position.x;
-	direction.y = ynew + enemyBase.loc.position.y;
-	enemyBase.directionMissle = direction;
-	enemyBase.missleAngle = angle;
-	enemyBase.missleSpeed = speed;
-	missleCollect.push_back(enemyBase);
+		// translate point back:
+		direction.x = xnew + enemyBase.loc.position.x;
+		direction.y = ynew + enemyBase.loc.position.y;
+		enemyBase.directionMissle = direction;
+		enemyBase.missleAngle = angle;
+		enemyBase.missleSpeed = speed;
+		missleCollect.push_back(enemyBase);
+	}
+	
+	
+	
 }

@@ -5,6 +5,7 @@
 #include "spriteSystem.h"
 #include "emitter.h"
 #include "explosionEmitter.h"
+#include "emitterPhys.h"
 
 
 
@@ -89,7 +90,7 @@ public:
 	emitter spawner1; //middle
 	emitter spawner2; //leftmost
 	emitter spawner3; //rightmost
-	emitter spawner4; //kamikaze to player
+	emitterPhys spawner4 = emitterPhys(); //kamikaze to player
 
 
 	int fireRate = 40;

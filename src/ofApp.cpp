@@ -29,6 +29,8 @@ void ofApp::setup() {
 	// The triangle is moveable in that we add these vertices to it's
 	// position to get screen space coordinates (for drawing).
 	//
+
+	//Sets verts for all the emitters
 	playerSprite.player.loc.verts.push_back(glm::vec3(100, -100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(0, 100, 0));
 	playerSprite.player.loc.verts.push_back(glm::vec3(-100, -100, 0));
@@ -43,6 +45,7 @@ void ofApp::setup() {
 	spawner3.player.loc.verts.push_back(glm::vec3(30, 30, 0));
 	spawner4.player.loc.position = glm::vec3(ofGetWidth() / 2, 20, 0);
 	spawner4.player.loc.verts.push_back(glm::vec3(30, 30, 0));
+	spawner4.player.img.load("Player.png");
 	spawnSpeed = spawnRate;
 	enemySpeed = enemySpeedSlider;
 
@@ -93,7 +96,7 @@ void ofApp::update() {
 			
 			r += PI / 2 + PI / 4;
 			spawner1.addEnemy(spawner1.missleUp(), r, enemySpeed);
-
+			
 			
 		}
 
@@ -118,6 +121,9 @@ void ofApp::update() {
 			spawner3.addEnemy(spawner3.missleUp(), r, enemySpeed);
 		}
 		
+		if (playerScore > 10 && fmod(Timer + 10, 200) == 0) {
+			spawner4.addEnemyPhys(playerSprite.player.loc.position, 0, 1.1);
+		}
 
 		float nextX = 0;
 		float nextY = 0;
@@ -168,6 +174,8 @@ void ofApp::update() {
 		spawner2.spawnHitbox = enemyHitbox;
 		spawner3.missleUpdate();
 		spawner3.spawnHitbox = enemyHitbox;
+		spawner4.missleUpdatePhys();
+		spawner4.spawnHitbox = enemyHitbox;
 		playerSprite.spawnHitbox = enemyHitbox;
 
 		//Update explosions
@@ -211,6 +219,7 @@ void ofApp::draw() {
 		spawner1.enemyDraw(lineButton);
 		spawner2.enemyDraw(lineButton);
 		spawner3.enemyDraw(lineButton);
+		spawner4.enemyDraw(lineButton);
 
 
 

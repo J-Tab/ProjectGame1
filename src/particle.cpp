@@ -13,6 +13,26 @@ Particle::Particle() {
 	color = ofColor::red;
 }
 
+Particle::Particle(ofVec3f pos, ofVec3f header, double angle, double initVel) {
+	position.set(pos);
+	ofVec3f direction = header - pos;
+
+	//Rotate the velocity vector
+	float s = sin(angle);
+	float c = cos(angle);
+	float xVel = direction.x * c - direction.y * s;
+	float yVel = direction.x * s + direction.y * c;
+
+	velocity.set(0, 0, 0);
+	acceleration.set(xVel * initVel, yVel * initVel, 0);
+	lifespan = .6;
+	birthtime = ofGetElapsedTimeMillis();
+	radius = 10;
+	damping = .99;
+	mass = 1;
+	color = ofColor::red;
+}
+
 Particle::Particle(ofVec3f pos ,double angle, double initVel) {
 	position.set(pos);
 	ofVec3f direction = ofVec3f(position.x, position.y - 1);

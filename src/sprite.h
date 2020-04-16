@@ -2,6 +2,7 @@
 #include "C:\Users\jemy_\Documents\Visual Studio 2017\of_v0.11.0_vs2017_release\libs\openFrameworks\app\ofBaseApp.h"
 #include "ofMain.h"
 #include "ofxGui.h"
+#include "particle.h"
 
 //Uses triangle class in order to detect the location and area of the sprite.
 class Triangle {
@@ -20,6 +21,7 @@ public:
 	glm::vec3 directionMissle;
 	ofImage img;
 	Triangle loc;
+	Particle particle;
 	int lifeSpan;
 	float missleAngle = 0;
 	float missleSpeed = 5;

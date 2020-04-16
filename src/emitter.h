@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "sprite.h"
+#include "particle.h"
 
 // Class that is similar to the spriteSystem class but it is for enemy spawners.
 
@@ -11,14 +12,25 @@ class emitter :
 	public spriteSystem
 {
 public:
+	//default constructor
 	emitter() {
 		enemyBase.img.load("Enemy.png");
 		enemyBase.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
 		enemyBase.loc.verts.push_back(glm::vec3(0, missleSize, 0));
 		enemyBase.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+		physicsEnabled = false;
 	}
 
+	// if parameter is true, the emitter uses physics to attack the player
+	emitter(bool kami) {
+		enemyBase.img.load("Enemy2.png");
+		enemyBase.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
+		enemyBase.loc.verts.push_back(glm::vec3(0, missleSize, 0));
+		enemyBase.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
+		physicsEnabled = true;
+	}
 
+	bool physicsEnabled;
 
 	glm::vec3 missleDown();
 
