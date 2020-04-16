@@ -61,6 +61,8 @@ public:
 
 	int Timer = 0;
 
+	int playerScore = 0;
+
 
 	// UI control data
 	//

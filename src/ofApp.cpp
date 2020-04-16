@@ -122,7 +122,9 @@ void ofApp::draw() {
 		if (debugEnable) {
 			gui.draw();
 		}
-	
+		
+		//Score UI
+		ofDrawBitmapStringHighlight("Score:"+std::to_string(playerScore), 20, 20, ofColor(0, 0, 0), ofColor(255, 0, 0));
 
 		//draw enemies
 		ofPushMatrix();
@@ -300,6 +302,7 @@ void ofApp::collisionUpdate()
 					tempI = i;
 					spawner1.missleKill(j);
 					deleted = true;
+					playerScore++;
 					enemyDeathSound.play();
 					j = spawner1.missleCollect.size();
 				}

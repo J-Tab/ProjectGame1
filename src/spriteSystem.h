@@ -7,7 +7,7 @@ class spriteSystem
 {
 public:
 	spriteSystem() {
-		missleBase.img.load("placeHolder.png");
+		missleBase.img.load("missleP.png");
 		missleBase.loc.verts.push_back(glm::vec3(missleSize, -missleSize, 0));
 		missleBase.loc.verts.push_back(glm::vec3(0, missleSize, 0));
 		missleBase.loc.verts.push_back(glm::vec3(-missleSize, -missleSize, 0));
