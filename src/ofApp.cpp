@@ -105,6 +105,7 @@ void ofApp::update() {
 
 		//Update explosions
 		for (explosionEmitter& x : explosionHolder) {
+
 			x.update();
 		}
 	}
@@ -308,7 +309,7 @@ void ofApp::collisionUpdate()
 
 			if (ofDistSquared(playerSprite.missleCollect[i].loc.position.x, playerSprite.missleCollect[i].loc.position.y, spawner1.missleCollect[j].loc.position.x, spawner1.missleCollect[j].loc.position.y)) {
 				if (detectCollision(playerSprite.missleCollect[i].loc, spawner1.missleCollect[j].loc)) {
-					explosionHolder.push_back(explosionEmitter(spawner1.missleCollect[j].loc.position,Small));
+					explosionHolder.push_back(explosionEmitter(spawner1.missleCollect[j].loc.position,Medium));
 					playerSprite.missleKill(i);
 					tempI = i;
 					spawner1.missleKill(j);

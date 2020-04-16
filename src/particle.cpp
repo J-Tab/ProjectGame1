@@ -7,7 +7,7 @@ Particle::Particle() {
 	forces.set(0, 0, 0);
 	lifespan = 5;
 	birthtime = 0;
-	radius = 20;
+	radius = 100;
 	damping = .99;
 	mass = 1;
 	color = ofColor::red;
@@ -24,10 +24,10 @@ Particle::Particle(ofVec3f pos ,double angle, double initVel) {
 	float yVel = direction.x * s + direction.y * c;
 
 	velocity.set(xVel*initVel, yVel*initVel, 0);
-	acceleration.set(-xVel * initVel / 10, -yVel * initVel / 10, 0);
-	lifespan = 5;
-	birthtime = 0;
-	radius = 1;
+	acceleration.set(-xVel * initVel , -yVel * initVel , 0);
+	lifespan = .6;
+	birthtime = ofGetElapsedTimeMillis();
+	radius = 10;
 	damping = .99;
 	mass = 1;
 	color = ofColor::red;

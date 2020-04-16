@@ -14,6 +14,7 @@ class explosionEmitter {
 		void explode();
 		void draw();
 		void update();
+		float explosionSpeed = .5;
 
 		ofVec2f position;
 		std::vector <Particle> particles;

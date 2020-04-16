@@ -13,7 +13,7 @@ void explosionEmitter::explode()
 	case Small:
 	{
 		for (int i = 0; i < 4; i++) {
-			Particle temp = Particle(position, i*PI / 2, 3);
+			Particle temp = Particle(position, i*PI / 2, explosionSpeed);
 			particles.push_back(temp);
 		}
 	}
@@ -21,7 +21,7 @@ void explosionEmitter::explode()
 	case Medium:
 	{
 		for (int i = 0; i < 8; i++) {
-			Particle temp = Particle(position, i*PI / 4, 3);
+			Particle temp = Particle(position, i*PI / 4, explosionSpeed);
 			particles.push_back(temp);
 		}
 	}
@@ -29,7 +29,7 @@ void explosionEmitter::explode()
 	case Large:
 	{
 		for (int i = 0; i < 16; i++) {
-			Particle temp = Particle(position, i*PI / 8, 3);
+			Particle temp = Particle(position, i*PI / 8, explosionSpeed);
 			particles.push_back(temp);
 		}
 	}
@@ -48,7 +48,16 @@ void explosionEmitter::draw()
 
 void explosionEmitter::update()
 {
-	for (Particle& x : particles) {
-		x.integrate();
+
+
+	for (int i = 0; i < particles.size(); i++) {
+
+		if (particles[i].age() > particles[i].lifespan) {
+			particles.erase(particles.begin()+ i);
+		}
+		else {
+			particles[i].integrate();
+		}
+		
 	}
 }
