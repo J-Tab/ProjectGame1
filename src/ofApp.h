@@ -64,6 +64,8 @@ public:
 	int playerScore = 0;
 
 
+	bool playerDead = false;
+
 	// UI control data
 	//
 	bool bFullscreen = false;

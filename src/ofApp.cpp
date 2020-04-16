@@ -37,6 +37,8 @@ void ofApp::setup() {
 //--------------------------------------------------------------
 void ofApp::update() {
 	//Determine next postion of the player by buttons pressed
+	
+
 	if (startGame) {
 		MissleTimer++;
 		Timer++;
@@ -109,6 +111,9 @@ void ofApp::update() {
 			x.update();
 		}
 	}
+	if (playerDead) {
+		playerSprite.player.loc.position = ofVec3f(-500, -500, 0);
+	}
 	
 }
 
@@ -148,15 +153,17 @@ void ofApp::draw() {
 		// draw player in screen space (we need to add the position to get screen coordinates)
 		//
 
+		if (!playerDead) {
+			ofPushMatrix();
+			m = glm::translate(glm::mat4(1.0), glm::vec3(playerSprite.player.loc.position));
+			ofMultMatrix(m);
+			ofSetColor(255, 255, 255);
+			playerSprite.player.img.draw(-50, -50, 100, 100);
+			ofPopMatrix();
 
-		ofPushMatrix();
-		m = glm::translate(glm::mat4(1.0), glm::vec3(playerSprite.player.loc.position));
-		ofMultMatrix(m);
-		ofSetColor(255, 255, 255);
-		playerSprite.player.img.draw(-50, -50, 100, 100);
-		ofPopMatrix();
-
-		playerSprite.missleDraw(lineButton);
+			playerSprite.missleDraw(lineButton);
+		}
+		
 
 		//draw explosions
 		for (explosionEmitter& x : explosionHolder) {
@@ -186,7 +193,7 @@ void ofApp::keyPressed(int key) {
 		if (!startGame) {
 			startGame = !startGame;
 		}
-		else {
+		else if (!playerDead){
 			bSpaceKeyDown = true;
 		}
 		break;
@@ -319,11 +326,32 @@ void ofApp::collisionUpdate()
 					enemyDeathSound.play();
 					j = spawner1.missleCollect.size();
 				}
+				
 			}
 			
 
 		}
 	}
+
+	//Similar to above but this check is for the player
+	if (!playerDead) {
+		for (int j = 0; j < spawner1.missleCollect.size(); j++) {
+
+			if (ofDistSquared(playerSprite.player.loc.position.x, playerSprite.player.loc.position.y, spawner1.missleCollect[j].loc.position.x, spawner1.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.player.loc, spawner1.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(playerSprite.player.loc.position, Large));
+					playerDead = true;
+					spawner1.missleKill(j);
+					enemyDeathSound.play();
+					j = spawner1.missleCollect.size();
+				}
+			}
+
+
+		}
+	}
+	
+
 }
 
 
