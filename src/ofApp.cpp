@@ -102,6 +102,11 @@ void ofApp::update() {
 		spawner1.missleUpdate();
 		spawner1.spawnHitbox = enemyHitbox;
 		playerSprite.spawnHitbox = enemyHitbox;
+
+		//Update explosions
+		for (explosionEmitter& x : explosionHolder) {
+			x.update();
+		}
 	}
 	
 }
@@ -151,6 +156,11 @@ void ofApp::draw() {
 		ofPopMatrix();
 
 		playerSprite.missleDraw(lineButton);
+
+		//draw explosions
+		for (explosionEmitter& x : explosionHolder) {
+			x.draw();
+		}
 		
 		
 	}
@@ -298,10 +308,12 @@ void ofApp::collisionUpdate()
 
 			if (ofDistSquared(playerSprite.missleCollect[i].loc.position.x, playerSprite.missleCollect[i].loc.position.y, spawner1.missleCollect[j].loc.position.x, spawner1.missleCollect[j].loc.position.y)) {
 				if (detectCollision(playerSprite.missleCollect[i].loc, spawner1.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(spawner1.missleCollect[j].loc.position,Small));
 					playerSprite.missleKill(i);
 					tempI = i;
 					spawner1.missleKill(j);
 					deleted = true;
+					
 					playerScore++;
 					enemyDeathSound.play();
 					j = spawner1.missleCollect.size();

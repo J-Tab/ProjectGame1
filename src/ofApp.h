@@ -4,6 +4,8 @@
 #include "sprite.h"
 #include "spriteSystem.h"
 #include "emitter.h"
+#include "explosionEmitter.h"
+
 
 
 
@@ -37,12 +39,11 @@ public:
 
 
 	// Part of the update function, checks similar sprites to see if they are together.
-	//COLLISION CURRENTLY UNOPTIMAL
 	void collisionUpdate();
 
 
-	// Search for potential sprite collision using binary search, return -1 if no match
-	
+	//Explosion Emitter
+	std::vector <explosionEmitter> explosionHolder;
 
 
 	
@@ -60,7 +61,6 @@ public:
 	int MissleTimer = 0;
 
 	int Timer = 0;
-
 	int playerScore = 0;
 
 
