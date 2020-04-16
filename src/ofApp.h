@@ -38,7 +38,9 @@ public:
 	bool detectCollision(Triangle a, Triangle b);
 
 
+
 	// Part of the update function, checks similar sprites to see if they are together.
+
 	void collisionUpdate();
 
 
@@ -65,6 +67,8 @@ public:
 
 
 	bool playerDead = false;
+	bool enemyUpdate = false; //Update enemy emitter speed
+
 
 	// UI control data
 	//
@@ -80,8 +84,13 @@ public:
 	bool bUpKeyDown = false;
 	bool bLeftKeyDown = false;
 	bool bRightKeyDown = false;
+	
+	// enemy spawners
+	emitter spawner1; //middle
+	emitter spawner2; //leftmost
+	emitter spawner3; //rightmost
+	emitter spawner4; //kamikaze to player
 
-	emitter spawner1;
 
 	int fireRate = 40;
 
@@ -92,8 +101,13 @@ public:
 	ofxToggle lineButton;
 	ofxToggle enemyHitbox;
 	ofxFloatSlider fireSlider;
+	
+
 	ofxFloatSlider spawnRate;
-	ofxFloatSlider enemySpeed;
+	float spawnSpeed;
+
+	ofxFloatSlider enemySpeedSlider;
+	float enemySpeed;
 
 
 	ofSoundPlayer playerFire;

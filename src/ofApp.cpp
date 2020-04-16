@@ -13,12 +13,16 @@ void ofApp::setup() {
 	gui.add(angleSlider.setup("angle", 0, 0, 5));
 	gui.add(fireSlider.setup("firespeed", 5, 1, 10));
 	gui.add(spawnRate.setup("enemy spawn speed", 80, 1, 200));
-	gui.add(enemySpeed.setup("enemy velocity", 2, 1, 5));
+	gui.add(enemySpeedSlider.setup("enemy velocity", 2, 1, 5));
 	gui.add(lineButton.setup("Missle Line toggle", false));
 	gui.add(enemyHitbox.setup("Enemy Hitbox Toggle", false));
 
 	spawner1.player.loc.position = glm::vec3(ofGetWidth()/2, 20, 0);
+	spawner2.player.loc.position = glm::vec3(ofGetWidth() / 4, 20, 0);
+	spawner3.player.loc.position = glm::vec3(ofGetWidth() / 4 + ofGetWidth() / 2, 20, 0);
 	spawner1.player.img.load("Player.png");
+	spawner2.player.img.load("Player.png");
+	spawner3.player.img.load("Player.png");
 
 	// Exam;ple on how to add elements to a vector<>
 	// Store the vertices to the triangle relative to origin (0, 0, 0);
@@ -31,17 +35,47 @@ void ofApp::setup() {
 	spawner1.player.loc.verts.push_back(glm::vec3(-30, 30, 0));
 	spawner1.player.loc.verts.push_back(glm::vec3(0, -30, 0));
 	spawner1.player.loc.verts.push_back(glm::vec3(30, 30, 0));
+	spawner2.player.loc.verts.push_back(glm::vec3(-30, 30, 0));
+	spawner2.player.loc.verts.push_back(glm::vec3(0, -30, 0));
+	spawner2.player.loc.verts.push_back(glm::vec3(30, 30, 0));
+	spawner3.player.loc.verts.push_back(glm::vec3(-30, 30, 0));
+	spawner3.player.loc.verts.push_back(glm::vec3(0, -30, 0));
+	spawner3.player.loc.verts.push_back(glm::vec3(30, 30, 0));
+	spawner4.player.loc.position = glm::vec3(ofGetWidth() / 2, 20, 0);
+	spawner4.player.loc.verts.push_back(glm::vec3(30, 30, 0));
+	spawnSpeed = spawnRate;
+	enemySpeed = enemySpeedSlider;
+
+
 	ofSetBackgroundColor(ofColor::black);
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	//Determine next postion of the player by buttons pressed
-	
+	enemySpeedSlider = enemySpeed;
+	spawnRate = spawnSpeed;
 
 	if (startGame) {
 		MissleTimer++;
 		Timer++;
+
+		//update enemy emitters every 5th of the playerscore
+		if (fmod(playerScore, 5) == 1 && !enemyUpdate) {
+			enemySpeed = enemySpeed + .25;
+			if (spawnSpeed > 10) {
+				spawnSpeed = spawnSpeed - 5;
+			}
+			enemyUpdate = true;
+
+		}
+		if (fmod(playerScore, 5) == 2) {
+			enemyUpdate = false;
+		}
+
+
+
+
 		if (bSpaceKeyDown) {
 			if (fmod(MissleTimer, fireRate) == 0) {
 				playerFire.play();
@@ -50,13 +84,40 @@ void ofApp::update() {
 			}
 		}
 
-		if (fmod(Timer, (int)spawnRate) == 0) {
-			float random = ((float)rand()) / (float)RAND_MAX;
-			float diff = PI / 2;
-			float r = random * diff;
+		float random = ((float)rand()) / (float)RAND_MAX;
+		float diff = PI / 2;
+		float r = random * diff;
+
+
+		if (fmod(Timer, (int)spawnSpeed) == 0) {
+			
 			r += PI / 2 + PI / 4;
 			spawner1.addEnemy(spawner1.missleUp(), r, enemySpeed);
+
+			
 		}
+
+
+
+
+
+		//New enemy emitters when player reaches certain score
+		if (playerScore > 10 && fmod(Timer+20, (int)spawnSpeed) == 0) {
+			float random1 = ((float)rand()) / (float)RAND_MAX;
+			float r = random1 * diff;
+			r += PI / 2 + PI / 4;
+			spawner2.addEnemy(spawner2.missleUp(), r, enemySpeed);
+
+
+			
+		}
+		if (playerScore > 20 && fmod(Timer + 10, (int)spawnSpeed) == 0) {
+			float random2 = ((float)rand()) / (float)RAND_MAX;
+			r = random2 * diff;
+			r += PI / 2 + PI / 4;
+			spawner3.addEnemy(spawner3.missleUp(), r, enemySpeed);
+		}
+		
 
 		float nextX = 0;
 		float nextY = 0;
@@ -103,6 +164,10 @@ void ofApp::update() {
 		playerSprite.missleUpdate();
 		spawner1.missleUpdate();
 		spawner1.spawnHitbox = enemyHitbox;
+		spawner2.missleUpdate();
+		spawner2.spawnHitbox = enemyHitbox;
+		spawner3.missleUpdate();
+		spawner3.spawnHitbox = enemyHitbox;
 		playerSprite.spawnHitbox = enemyHitbox;
 
 		//Update explosions
@@ -144,6 +209,8 @@ void ofApp::draw() {
 		ofSetColor(255, 255, 255);
 		ofPopMatrix();
 		spawner1.enemyDraw(lineButton);
+		spawner2.enemyDraw(lineButton);
+		spawner3.enemyDraw(lineButton);
 
 
 
@@ -307,6 +374,8 @@ void ofApp::collisionUpdate()
 {
 	bool deleted = false;
 	int tempI;
+
+	//Check for collisions with player missles and enemies
 	for (int i = 0; i < playerSprite.missleCollect.size(); i++) {
 		if (deleted) {
 			i = tempI;
@@ -331,6 +400,46 @@ void ofApp::collisionUpdate()
 			
 
 		}
+		for (int j = 0; j < spawner2.missleCollect.size(); j++) {
+
+			if (ofDistSquared(playerSprite.missleCollect[i].loc.position.x, playerSprite.missleCollect[i].loc.position.y, spawner2.missleCollect[j].loc.position.x, spawner2.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.missleCollect[i].loc, spawner2.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(spawner2.missleCollect[j].loc.position, Medium));
+					playerSprite.missleKill(i);
+					tempI = i;
+					spawner2.missleKill(j);
+					deleted = true;
+
+					playerScore++;
+					enemyDeathSound.play();
+					j = spawner2.missleCollect.size();
+				}
+
+			}
+
+
+		}
+
+		for (int j = 0; j < spawner3.missleCollect.size(); j++) {
+
+			if (ofDistSquared(playerSprite.missleCollect[i].loc.position.x, playerSprite.missleCollect[i].loc.position.y, spawner3.missleCollect[j].loc.position.x, spawner3.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.missleCollect[i].loc, spawner3.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(spawner3.missleCollect[j].loc.position, Medium));
+					playerSprite.missleKill(i);
+					tempI = i;
+					spawner3.missleKill(j);
+					deleted = true;
+
+					playerScore++;
+					enemyDeathSound.play();
+					j = spawner3.missleCollect.size();
+				}
+
+			}
+
+
+		}
+
 	}
 
 	//Similar to above but this check is for the player
@@ -344,6 +453,35 @@ void ofApp::collisionUpdate()
 					spawner1.missleKill(j);
 					enemyDeathSound.play();
 					j = spawner1.missleCollect.size();
+				}
+			}
+
+
+		}
+
+		for (int j = 0; j < spawner2.missleCollect.size(); j++) {
+
+			if (ofDistSquared(playerSprite.player.loc.position.x, playerSprite.player.loc.position.y, spawner2.missleCollect[j].loc.position.x, spawner2.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.player.loc, spawner2.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(playerSprite.player.loc.position, Large));
+					playerDead = true;
+					spawner2.missleKill(j);
+					enemyDeathSound.play();
+					j = spawner2.missleCollect.size();
+				}
+			}
+
+
+		}
+		for (int j = 0; j < spawner3.missleCollect.size(); j++) {
+
+			if (ofDistSquared(playerSprite.player.loc.position.x, playerSprite.player.loc.position.y, spawner3.missleCollect[j].loc.position.x, spawner3.missleCollect[j].loc.position.y)) {
+				if (detectCollision(playerSprite.player.loc, spawner3.missleCollect[j].loc)) {
+					explosionHolder.push_back(explosionEmitter(playerSprite.player.loc.position, Large));
+					playerDead = true;
+					spawner3.missleKill(j);
+					enemyDeathSound.play();
+					j = spawner3.missleCollect.size();
 				}
 			}
 
